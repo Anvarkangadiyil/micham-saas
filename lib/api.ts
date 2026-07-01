@@ -72,3 +72,28 @@ export async function getExpenses<T = unknown>(
     ...options,
   });
 }
+
+export interface UpdateExpenseInput {
+  amount: number;
+  category: string;
+  description: string;
+  date: string;
+}
+
+export async function updateExpense<T = unknown>(
+  id: string,
+  data: UpdateExpenseInput
+): Promise<T> {
+  return apiRequest<T>(`/api/expenses/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteExpense<T = unknown>(
+  id: string
+): Promise<T> {
+  return apiRequest<T>(`/api/expenses/${id}`, {
+    method: "DELETE",
+  });
+}

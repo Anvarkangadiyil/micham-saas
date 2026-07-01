@@ -3,6 +3,7 @@ import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import mongoose from "mongoose";
 
+import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import Expense from "@/models/Expense";
 
@@ -14,15 +15,26 @@ const createExpenseSchema = z.object({
   requestId: z.string().trim().min(1).optional(),
 });
 
-export async function GET(request: Request) {
+export const GET = auth(async (req) => {
   try {
+    // 1. Authenticate user
+    if (!req.auth || !req.auth.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    
+    const userId = req.auth.user.id;
+
     await connectDB();
 
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = new URL(req.url);
     const category = searchParams.get("category")?.trim();
     const sort = searchParams.get("sort");
 
-    const query: { category?: string } = {};
+    // 2. Query only the user's expenses
+    const query: { userId: string; category?: string; isDeleted?: any } = {
+      userId,
+      isDeleted: { $ne: true },
+    };
     if (category) {
       query.category = category;
     }
@@ -36,19 +48,25 @@ export async function GET(request: Request) {
     return NextResponse.json(
       {
         error: "Failed to fetch expenses",
-        ...(process.env.NODE_ENV !== "production" &&
-        error instanceof Error
+        ...(process.env.NODE_ENV !== "production" && error instanceof Error
           ? { detail: error.message }
           : {}),
       },
       { status: 500 }
     );
   }
-}
+});
 
-export async function POST(request: Request) {
+export const POST = auth(async (req) => {
   try {
-    const body = await request.json();
+    // 1. Authenticate user
+    if (!req.auth || !req.auth.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = req.auth.user.id;
+
+    const body = await req.json();
     const parsed = createExpenseSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -66,15 +84,18 @@ export async function POST(request: Request) {
 
     await connectDB();
 
+    // 2. Prevent duplicate creation (idempotency check)
     if (requestId) {
-      const existingExpense = await Expense.findOne({ id: requestId }).lean();
+      const existingExpense = await Expense.findOne({ id: requestId, userId }).lean();
       if (existingExpense) {
         return NextResponse.json(existingExpense, { status: 200 });
       }
     }
 
+    // 3. Create expense with the user's ID
     const createdExpense = await Expense.create({
       id: expenseId,
+      userId,
       amount,
       category,
       description,
@@ -84,7 +105,8 @@ export async function POST(request: Request) {
     return NextResponse.json(createdExpense.toObject(), { status: 201 });
   } catch (error) {
     console.error("POST /api/expenses failed:", error);
-    // Handle duplicate-key races for idempotent requests.
+    
+    // Handle duplicate-key races for idempotent requests
     if (
       error instanceof mongoose.Error &&
       "code" in error &&
@@ -99,7 +121,10 @@ export async function POST(request: Request) {
           : null;
 
       if (duplicateId) {
-        const existingExpense = await Expense.findOne({ id: duplicateId }).lean();
+        if (!req.auth || !req.auth.user?.id) {
+          return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+        const existingExpense = await Expense.findOne({ id: duplicateId, userId: req.auth.user.id }).lean();
         if (existingExpense) {
           return NextResponse.json(existingExpense, { status: 200 });
         }
@@ -109,12 +134,11 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error: "Failed to create expense",
-        ...(process.env.NODE_ENV !== "production" &&
-        error instanceof Error
+        ...(process.env.NODE_ENV !== "production" && error instanceof Error
           ? { detail: error.message }
           : {}),
       },
       { status: 500 }
     );
   }
-}
+});

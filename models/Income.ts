@@ -1,15 +1,12 @@
 import mongoose, { Schema, type Model } from "mongoose";
 
-export interface IExpense {
-  id: string; // Keep unique UUID for backward compatibility
+export interface IIncome {
   userId: string;
   amount: number;
-  category: string; // software, travel, equipment, marketing, other (enforced in schema/Zod)
-  description: string;
   date: Date;
   clientId?: mongoose.Types.ObjectId;
   projectId?: mongoose.Types.ObjectId;
-  receiptUrl?: string;
+  source: string;
   notes?: string;
   isDeleted?: boolean;
   deletedAt?: Date;
@@ -17,14 +14,8 @@ export interface IExpense {
   updatedAt?: Date;
 }
 
-const expenseSchema = new Schema<IExpense>(
+const incomeSchema = new Schema<IIncome>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-    },
     userId: {
       type: String,
       required: true,
@@ -34,16 +25,6 @@ const expenseSchema = new Schema<IExpense>(
       type: Number,
       required: true,
       min: 0,
-    },
-    category: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-      trim: true,
     },
     date: {
       type: Date,
@@ -59,9 +40,10 @@ const expenseSchema = new Schema<IExpense>(
       ref: "Project",
       required: false,
     },
-    receiptUrl: {
+    source: {
       type: String,
-      required: false,
+      required: true,
+      trim: true,
     },
     notes: {
       type: String,
@@ -74,6 +56,7 @@ const expenseSchema = new Schema<IExpense>(
     },
     deletedAt: {
       type: Date,
+      required: false,
     },
   },
   {
@@ -82,9 +65,9 @@ const expenseSchema = new Schema<IExpense>(
   }
 );
 
-expenseSchema.index({ userId: 1, isDeleted: 1 });
+incomeSchema.index({ userId: 1, isDeleted: 1 });
 
-const Expense: Model<IExpense> =
-  mongoose.models.Expense || mongoose.model<IExpense>("Expense", expenseSchema);
+const Income: Model<IIncome> =
+  mongoose.models.Income || mongoose.model<IIncome>("Income", incomeSchema);
 
-export default Expense;
+export default Income;
