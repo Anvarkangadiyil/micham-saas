@@ -43,7 +43,7 @@ export default async function EditInvoicePage({ params }: EditInvoicePageProps) 
   return (
     <div className="min-h-screen bg-canvas-soft flex flex-col">
       <Header user={session.user} />
-      <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <InvoiceForm
           clients={clients}
           projects={projects}

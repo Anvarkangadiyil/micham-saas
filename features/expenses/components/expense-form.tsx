@@ -167,7 +167,7 @@ export function ExpenseForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         {/* Amount Field */}
         <div className="space-y-1.5">
           <label htmlFor="amount" className="text-sm font-medium leading-none text-ink-secondary">
@@ -205,7 +205,7 @@ export function ExpenseForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         {/* Category Field */}
         <div className="space-y-1.5">
           <label htmlFor="category" className="text-sm font-medium leading-none text-ink-secondary flex items-center justify-between">
@@ -267,7 +267,7 @@ export function ExpenseForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         {/* Client Field */}
         <div className="space-y-1.5">
           <label htmlFor="clientId" className="text-sm font-medium leading-none text-ink-secondary">

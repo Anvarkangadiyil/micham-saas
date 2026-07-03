@@ -68,6 +68,10 @@ export async function getInvoices() {
           : undefined,
         issueDate: inv.issueDate.toISOString().split("T")[0],
         dueDate: inv.dueDate.toISOString().split("T")[0],
+        lineItems: inv.lineItems.map((item: any) => ({
+          ...item,
+          _id: item._id?.toString(),
+        })),
         createdAt: inv.createdAt?.toISOString(),
         updatedAt: inv.updatedAt?.toISOString(),
       })),

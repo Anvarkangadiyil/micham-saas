@@ -7,41 +7,46 @@ import { v4 as uuidv4 } from "uuid";
  * If Cloudinary environment variables are set (CLOUDINARY_CLOUD_NAME & CLOUDINARY_UPLOAD_PRESET),
  * it uploads to Cloudinary via REST API. Otherwise, it falls back to writing the file to public/uploads/.
  */
+
+// lib/cloudinary.ts
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export default cloudinary;
+
 export async function uploadReceipt(file: File): Promise<string> {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+ 
 
-  if (cloudName && uploadPreset) {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const base64 = buffer.toString("base64");
-      const dataUrl = `data:${file.type};base64,${base64}`;
+ if (cloudName) {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-      const formData = new FormData();
-      formData.append("file", dataUrl);
-      formData.append("upload_preset", uploadPreset);
+    const result = await new Promise<any>((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder: "receipts",
+          },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        )
+        .end(buffer);
+    });
 
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.secure_url) {
-          return data.secure_url;
-        }
-      }
-      console.warn("Cloudinary upload response was not OK, trying local fallback.");
-    } catch (error) {
-      console.warn("Cloudinary upload error, falling back to local:", error);
-    }
+    return result.secure_url;
+  } catch (error) {
+    console.warn("Cloudinary upload failed, using local storage:", error);
   }
-
+}
   // Local storage fallback:
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);

@@ -274,7 +274,7 @@ export function InvoiceDetail({ invoice, currencySymbol = "$" }: InvoiceDetailPr
                   <div className="flex justify-between">
                     <span className="text-ink-muted">Issue Date</span>
                     <span className="font-medium text-ink-secondary">
-                      {new Date(invoice.issueDate).toLocaleDateString(undefined, {
+                      {new Date(invoice.issueDate).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",
                         year: "numeric",
@@ -284,7 +284,7 @@ export function InvoiceDetail({ invoice, currencySymbol = "$" }: InvoiceDetailPr
                   <div className="flex justify-between">
                     <span className="text-ink-muted">Due Date</span>
                     <span className="font-bold text-ink">
-                      {new Date(invoice.dueDate).toLocaleDateString(undefined, {
+                      {new Date(invoice.dueDate).toLocaleDateString("en-US", {
                         month: "long",
                         day: "numeric",
                         year: "numeric",

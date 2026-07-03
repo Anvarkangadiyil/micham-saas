@@ -261,12 +261,23 @@ export function DashboardClient({
 
   return (
     <div className="space-y-6">
-      {/* Page Title */}
-      <div>
-        <h1 className="text-heading-2 font-bold tracking-tight text-ink">Dashboard</h1>
-        <p className="text-body-sm text-ink-muted">
-          Your financial breakdown at a glance.
-        </p>
+      {/* Page Title & Add Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-heading-2 font-bold tracking-tight text-ink">Dashboard</h1>
+          <p className="text-body-sm text-ink-muted">
+            Your financial breakdown at a glance.
+          </p>
+        </div>
+        <Button
+          asChild
+          className="bg-primary text-white hover:bg-primary-active self-start sm:self-auto gap-1.5 h-9"
+        >
+          <Link href="/transactions/create">
+            <Plus className="h-4 w-4" />
+            Add Transaction
+          </Link>
+        </Button>
       </div>
 
       {/* Onboarding Checklist */}
@@ -381,91 +392,38 @@ export function DashboardClient({
         </div>
       </div>
 
-      {/* Analytics & Quick Form Section */}
-      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        {/* Chart Column */}
-        <div className="rounded-lg border border-hairline bg-surface p-6 shadow-elevation-1 flex flex-col justify-between min-h-[350px]">
-          <div>
-            <h2 className="text-sm font-semibold text-ink mb-1">Income & Expenses</h2>
-            <p className="text-2xs text-ink-muted mb-4">Last 6 months comparison</p>
-          </div>
-          <div className="h-[250px] w-full">
-            {mounted ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f1f1" />
-                  <XAxis dataKey="name" stroke="#a39e98" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#a39e98" fontSize={11} tickLine={false} axisLine={false} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#ffffff",
-                      border: "1px solid #e6e6e6",
-                      borderRadius: "6px",
-                      fontSize: "12px",
-                      boxShadow: "0 4px 18px rgba(0,0,0,0.04)",
-                    }}
-                  />
-                  <Legend iconType="circle" wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }} />
-                  <Bar dataKey="Income" fill="#0075de" radius={[4, 4, 0, 0]} maxBarSize={30} />
-                  <Bar dataKey="Expenses" fill="#dd5b00" radius={[4, 4, 0, 0]} maxBarSize={30} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex items-center justify-center text-xs text-ink-muted">
-                Loading analytics...
-              </div>
-            )}
-          </div>
+      {/* Analytics Section (Full Width Chart) */}
+      <div className="rounded-lg border border-hairline bg-surface p-6 shadow-elevation-1 flex flex-col justify-between min-h-[350px] w-full">
+        <div>
+          <h2 className="text-sm font-semibold text-ink mb-1">Income & Expenses</h2>
+          <p className="text-2xs text-ink-muted mb-4">Last 6 months comparison</p>
         </div>
-
-        {/* Quick Add Form Column */}
-        <div className="rounded-lg border border-hairline bg-surface shadow-elevation-1 flex flex-col">
-          {/* Form Tabs */}
-          <div className="flex border-b border-hairline text-sm">
-            <button
-              onClick={() => setActiveFormTab("expense")}
-              className={`flex-1 py-3 text-center font-medium border-b-2 transition-colors ${
-                activeFormTab === "expense"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-ink-muted hover:text-ink"
-              }`}
-            >
-              Quick Expense
-            </button>
-            <button
-              onClick={() => setActiveFormTab("income")}
-              className={`flex-1 py-3 text-center font-medium border-b-2 transition-colors ${
-                activeFormTab === "income"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-ink-muted hover:text-ink"
-              }`}
-            >
-              Quick Income
-            </button>
-          </div>
-
-          {/* Form Content */}
-          <div className="p-5 flex-1">
-            {activeFormTab === "expense" ? (
-              <ExpenseForm
-                clients={clients}
-                projects={projects}
-                currencySymbol={currencySymbol}
-                onSuccess={() => {
-                  router.refresh();
-                }}
-              />
-            ) : (
-              <IncomeForm
-                clients={clients}
-                projects={projects}
-                currencySymbol={currencySymbol}
-                onSuccess={() => {
-                  router.refresh();
-                }}
-              />
-            )}
-          </div>
+        <div className="h-[250px] w-full">
+          {mounted ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f1f1" />
+                <XAxis dataKey="name" stroke="#a39e98" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#a39e98" fontSize={11} tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e6e6e6",
+                    borderRadius: "6px",
+                    fontSize: "12px",
+                    boxShadow: "0 4px 18px rgba(0,0,0,0.04)",
+                  }}
+                />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }} />
+                <Bar dataKey="Income" fill="#0075de" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Bar dataKey="Expenses" fill="#dd5b00" radius={[4, 4, 0, 0]} maxBarSize={30} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-full flex items-center justify-center text-xs text-ink-muted">
+              Loading analytics...
+            </div>
+          )}
         </div>
       </div>
 
@@ -477,27 +435,36 @@ export function DashboardClient({
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Filter Type */}
-            <div className="flex rounded-md border border-hairline bg-surface p-0.5 text-xs">
+            <div className="flex rounded-md border border-hairline bg-canvas-soft p-0.5 text-xs">
               <button
+                type="button"
                 onClick={() => setFilterType("all")}
-                className={`rounded px-2.5 py-1 font-medium transition-colors ${
-                  filterType === "all" ? "bg-canvas-soft text-ink font-semibold" : "text-ink-muted hover:text-ink"
+                className={`rounded px-3 py-1 font-semibold transition-all ${
+                  filterType === "all"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
                 }`}
               >
                 All
               </button>
               <button
+                type="button"
                 onClick={() => setFilterType("income")}
-                className={`rounded px-2.5 py-1 font-medium transition-colors ${
-                  filterType === "income" ? "bg-canvas-soft text-ink font-semibold" : "text-ink-muted hover:text-ink"
+                className={`rounded px-3 py-1 font-semibold transition-all ${
+                  filterType === "income"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
                 }`}
               >
                 Income
               </button>
               <button
+                type="button"
                 onClick={() => setFilterType("expense")}
-                className={`rounded px-2.5 py-1 font-medium transition-colors ${
-                  filterType === "expense" ? "bg-canvas-soft text-ink font-semibold" : "text-ink-muted hover:text-ink"
+                className={`rounded px-3 py-1 font-semibold transition-all ${
+                  filterType === "expense"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-ink-muted hover:text-ink"
                 }`}
               >
                 Expenses
@@ -508,7 +475,7 @@ export function DashboardClient({
             <select
               value={filterDate}
               onChange={(e: any) => setFilterDate(e.target.value)}
-              className="rounded-md border border-hairline bg-surface px-2.5 py-1 text-xs font-medium text-ink-secondary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="rounded-md border border-hairline bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary hover:border-ink-faint focus:border-primary focus:outline-none transition-colors cursor-pointer"
             >
               <option value="month">This Month</option>
               <option value="30days">Last 30 Days</option>
@@ -520,7 +487,7 @@ export function DashboardClient({
             <select
               value={filterClientId}
               onChange={(e) => setFilterClientId(e.target.value)}
-              className="rounded-md border border-hairline bg-surface px-2.5 py-1 text-xs font-medium text-ink-secondary focus:outline-none focus:ring-1 focus:ring-primary max-w-[150px]"
+              className="rounded-md border border-hairline bg-surface px-3 py-1.5 text-xs font-semibold text-ink-secondary hover:border-ink-faint focus:border-primary focus:outline-none transition-colors cursor-pointer max-w-[150px]"
             >
               <option value="">All Clients</option>
               {clients.map((c) => (
@@ -567,7 +534,7 @@ export function DashboardClient({
 
                     {/* Date */}
                     <td className="p-3 text-ink-secondary whitespace-nowrap">
-                      {new Date(tx.date).toLocaleDateString(undefined, {
+                      {new Date(tx.date).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
@@ -651,7 +618,7 @@ export function DashboardClient({
       {/* Edit Expense Modal */}
       {editingExpense && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-ink">Edit Expense</h2>
               <p className="text-xs text-ink-muted mt-0.5">Update the expense record details.</p>
@@ -674,7 +641,7 @@ export function DashboardClient({
       {/* Edit Income Modal */}
       {editingIncome && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-ink">Edit Income</h2>
               <p className="text-xs text-ink-muted mt-0.5">Update the income record details.</p>

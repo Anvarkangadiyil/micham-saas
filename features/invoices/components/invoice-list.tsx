@@ -6,16 +6,15 @@ import Link from "next/link";
 import {
   Plus,
   Search,
-  Calendar,
   Building2,
   Folder,
-  Eye,
   CheckCircle2,
   FileText,
   Clock,
   ArrowUpRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/utils";
 
 interface Invoice {
   _id: string;
@@ -200,12 +199,12 @@ export function InvoiceList({ invoices, clients, currencySymbol = "$" }: Invoice
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Status filter selection tabs */}
-          <div className="flex rounded-md border border-hairline bg-surface p-0.5 text-xs">
+          <div className="flex rounded-md border border-hairline bg-canvas-soft p-0.5 text-xs">
             <button
               onClick={() => setStatusFilter("all")}
-              className={`rounded px-2.5 py-1 font-medium transition-colors ${
+              className={`rounded px-3 py-1 font-semibold transition-all ${
                 statusFilter === "all"
-                  ? "bg-canvas-soft text-ink font-semibold"
+                  ? "bg-primary text-white shadow-sm"
                   : "text-ink-muted hover:text-ink"
               }`}
             >
@@ -213,9 +212,9 @@ export function InvoiceList({ invoices, clients, currencySymbol = "$" }: Invoice
             </button>
             <button
               onClick={() => setStatusFilter("draft")}
-              className={`rounded px-2.5 py-1 font-medium transition-colors ${
+              className={`rounded px-3 py-1 font-semibold transition-all ${
                 statusFilter === "draft"
-                  ? "bg-canvas-soft text-ink font-semibold"
+                  ? "bg-primary text-white shadow-sm"
                   : "text-ink-muted hover:text-ink"
               }`}
             >
@@ -223,9 +222,9 @@ export function InvoiceList({ invoices, clients, currencySymbol = "$" }: Invoice
             </button>
             <button
               onClick={() => setStatusFilter("sent")}
-              className={`rounded px-2.5 py-1 font-medium transition-colors ${
+              className={`rounded px-3 py-1 font-semibold transition-all ${
                 statusFilter === "sent"
-                  ? "bg-canvas-soft text-ink font-semibold"
+                  ? "bg-primary text-white shadow-sm"
                   : "text-ink-muted hover:text-ink"
               }`}
             >
@@ -233,9 +232,9 @@ export function InvoiceList({ invoices, clients, currencySymbol = "$" }: Invoice
             </button>
             <button
               onClick={() => setStatusFilter("paid")}
-              className={`rounded px-2.5 py-1 font-medium transition-colors ${
+              className={`rounded px-3 py-1 font-semibold transition-all ${
                 statusFilter === "paid"
-                  ? "bg-canvas-soft text-ink font-semibold"
+                  ? "bg-primary text-white shadow-sm"
                   : "text-ink-muted hover:text-ink"
               }`}
             >
@@ -243,9 +242,9 @@ export function InvoiceList({ invoices, clients, currencySymbol = "$" }: Invoice
             </button>
             <button
               onClick={() => setStatusFilter("overdue")}
-              className={`rounded px-2.5 py-1 font-medium transition-colors ${
+              className={`rounded px-3 py-1 font-semibold transition-all ${
                 statusFilter === "overdue"
-                  ? "bg-canvas-soft text-ink font-semibold"
+                  ? "bg-primary text-white shadow-sm"
                   : "text-ink-muted hover:text-ink"
               }`}
             >
@@ -275,97 +274,79 @@ export function InvoiceList({ invoices, clients, currencySymbol = "$" }: Invoice
           <table className="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
               <tr className="bg-canvas-soft border-b border-hairline text-ink-muted font-medium text-2xs uppercase tracking-wider">
-                <th className="p-3 pl-4">Invoice #</th>
-                <th className="p-3">Client</th>
-                <th className="p-3">Linked Project</th>
-                <th className="p-3">Issue Date</th>
-                <th className="p-3">Due Date</th>
-                <th className="p-3 text-center">Status</th>
-                <th className="p-3 text-right">Amount</th>
-                <th className="p-3 pr-4 text-center">Actions</th>
+                <th className="py-3 px-4">Invoice</th>
+                <th className="py-3 px-4">Client / Project</th>
+                <th className="py-3 px-4">Due Date</th>
+                <th className="py-3 px-4 text-center">Status</th>
+                <th className="py-3 px-4 text-right">Amount</th>
+                <th className="py-3 px-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-hairline">
               {filteredInvoices.map((inv) => {
                 const total = calculateInvoiceTotal(inv);
+                const isOverdue = inv.status === "overdue";
                 return (
-                  <tr key={inv._id} className="hover:bg-canvas-soft/20 transition-colors">
-                    {/* Invoice Number */}
-                    <td className="p-3 pl-4 font-semibold text-primary">
-                      <Link href={`/invoices/${inv._id}`} className="hover:underline">
+                  <tr key={inv._id} className="hover:bg-canvas-soft/10 transition-colors group">
+                    {/* Invoice Number & Issue Date */}
+                    <td className="py-4 px-4">
+                      <Link href={`/invoices/${inv._id}`} className="font-bold text-primary hover:underline block text-sm">
                         {inv.invoiceNumber}
                       </Link>
+                      <span className="text-3xs text-ink-muted mt-0.5 block">
+                        Issued {formatDate(inv.issueDate)}
+                      </span>
                     </td>
 
-                    {/* Client */}
-                    <td className="p-3">
-                      <div className="font-medium text-ink-secondary">
+                    {/* Client & Project */}
+                    <td className="py-4 px-4">
+                      <div className="font-semibold text-ink-secondary text-sm">
                         {inv.clientId ? inv.clientId.name : "Unknown Client"}
                       </div>
-                      {inv.clientId?.company && (
-                        <div className="text-3xs text-ink-muted flex items-center gap-1 mt-0.5">
-                          <Building2 className="h-3 w-3 text-ink-faint" />
-                          {inv.clientId.company}
-                        </div>
-                      )}
-                    </td>
-
-                    {/* Linked Project */}
-                    <td className="p-3 text-ink-muted">
                       {inv.projectId ? (
-                        <div className="flex items-center gap-1">
-                          <Folder className="h-3.5 w-3.5 text-ink-faint shrink-0" />
-                          <span className="truncate max-w-[120px]">{inv.projectId.name}</span>
+                        <div className="flex items-center gap-1 mt-0.5 text-3xs text-ink-muted">
+                          <Folder className="h-3 w-3 text-ink-faint shrink-0" />
+                          <span className="truncate max-w-[150px]">{inv.projectId.name}</span>
+                        </div>
+                      ) : inv.clientId?.company ? (
+                        <div className="flex items-center gap-1 mt-0.5 text-3xs text-ink-muted">
+                          <Building2 className="h-3 w-3 text-ink-faint shrink-0" />
+                          <span>{inv.clientId.company}</span>
                         </div>
                       ) : (
-                        "-"
+                        <span className="text-3xs text-ink-faint">-</span>
                       )}
-                    </td>
-
-                    {/* Issue Date */}
-                    <td className="p-3 text-ink-secondary whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-ink-faint" />
-                        {new Date(inv.issueDate).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </div>
                     </td>
 
                     {/* Due Date */}
-                    <td className="p-3 text-ink-secondary whitespace-nowrap">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-ink-faint" />
-                        {new Date(inv.dueDate).toLocaleDateString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </div>
+                    <td className="py-4 px-4 text-sm text-ink-secondary">
+                      <div className="font-medium">{formatDate(inv.dueDate)}</div>
+                      {isOverdue && (
+                        <span className="text-3xs text-destructive font-semibold block mt-0.5">
+                          Overdue payment
+                        </span>
+                      )}
                     </td>
 
-                    {/* Status */}
-                    <td className="p-3 text-center whitespace-nowrap">
+                    {/* Status Badge */}
+                    <td className="py-4 px-4 text-center whitespace-nowrap">
                       {getStatusBadge(inv.status)}
                     </td>
 
-                    {/* Amount */}
-                    <td className="p-3 text-right font-semibold text-ink">
+                    {/* Total Amount */}
+                    <td className="py-4 px-4 text-right font-bold text-ink text-sm">
                       {currencySymbol}{total.toFixed(2)}
                     </td>
 
-                    {/* Actions */}
-                    <td className="p-3 pr-4 text-center">
+                    {/* Actions Button */}
+                    <td className="py-4 px-4 pr-6 text-right">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => router.push(`/invoices/${inv._id}`)}
-                        className="h-8 gap-1.5 border-hairline hover:bg-canvas-soft text-xs"
+                        className="h-8 px-3 border-hairline hover:bg-canvas-soft text-xs font-semibold rounded"
                       >
-                        <Eye className="h-3.5 w-3.5" />
-                        <span>Manage</span>
+                        Manage
                       </Button>
                     </td>
                   </tr>

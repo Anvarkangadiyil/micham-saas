@@ -104,7 +104,7 @@ export function IncomeForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         {/* Amount Field */}
         <div className="space-y-1.5">
           <label htmlFor="amount" className="text-sm font-medium leading-none text-ink-secondary">
@@ -142,7 +142,7 @@ export function IncomeForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         {/* Source Field */}
         <div className="space-y-1.5">
           <label htmlFor="source" className="text-sm font-medium leading-none text-ink-secondary">
@@ -180,7 +180,7 @@ export function IncomeForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         {/* Project Field */}
         <div className="space-y-1.5">
           <label htmlFor="projectId" className="text-sm font-medium leading-none text-ink-secondary">
@@ -200,9 +200,6 @@ export function IncomeForm({
             ))}
           </select>
         </div>
-
-        {/* Empty space for grid alignment */}
-        <div className="hidden sm:block"></div>
       </div>
 
       {/* Notes Field */}

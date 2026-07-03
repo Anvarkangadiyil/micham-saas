@@ -12,7 +12,11 @@ export const authConfig: NextAuthConfig = {
       const isPublicRoute =
         nextUrl.pathname.startsWith("/api/auth") ||
         nextUrl.pathname.startsWith("/invoices/shared/") ||
-        nextUrl.pathname === "/favicon.ico";
+        nextUrl.pathname === "/favicon.ico" ||
+        nextUrl.pathname.endsWith(".jpg") ||
+        nextUrl.pathname.endsWith(".png") ||
+        nextUrl.pathname.endsWith(".svg") ||
+        nextUrl.pathname.endsWith(".ico");
 
       if (isPublicRoute) {
         return true;

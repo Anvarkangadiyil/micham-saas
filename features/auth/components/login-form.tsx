@@ -41,11 +41,7 @@ export function LoginForm() {
         router.refresh();
       }
     } catch (error) {
-      // If next-auth redirects, it will throw an error, which is caught here.
-      // If it's a redirect, we don't want to show an error toast.
-      // But just in case it's a real error:
       console.error(error);
-      // In Next.js, redirect throws an error that starts with "NEXT_REDIRECT"
       if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
         return;
       }
@@ -55,22 +51,31 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md space-y-8 rounded-2xl border border-border bg-card p-8 shadow-sm">
+    <div className="w-full max-w-sm space-y-6 rounded-lg border border-hairline bg-surface p-8 shadow-elevation-1">
       <div className="flex flex-col items-center space-y-2 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400">
-          <Lock className="h-6 w-6" />
+        {/* Mini illustration on mobile screens */}
+        <div className="block md:hidden relative w-16 h-16 rounded-xl border border-hairline overflow-hidden mb-2 shadow-xs bg-[#213183]">
+          <img
+            src="/auth_illust.jpg"
+            alt="Freelancer Illustration"
+            className="w-full h-full object-cover"
+          />
         </div>
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+
+        <div className="hidden md:flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <Lock className="h-5 w-5" />
+        </div>
+        <h1 className="text-xl font-bold tracking-tight text-ink">
           Welcome back
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Enter your credentials to access your account
+        <p className="text-xs text-ink-muted">
+          Sign in to access your freelance finance dashboard
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {globalError && (
-          <div className="rounded-lg bg-destructive/10 p-3 text-sm font-medium text-destructive">
+          <div className="rounded-md bg-destructive/10 p-3 text-xs font-medium text-destructive">
             {globalError}
           </div>
         )}
@@ -79,19 +84,19 @@ export function LoginForm() {
         <div className="space-y-1.5">
           <label
             htmlFor="email"
-            className="text-sm font-medium leading-none text-foreground"
+            className="text-xs font-bold text-ink-secondary"
           >
-            Email address
+            Email Address
           </label>
           <div className="relative">
-            <Mail className="absolute top-1/2 left-3 h-4.5 w-4.5 -translate-y-1/2 text-muted-foreground" />
+            <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-faint" />
             <input
               {...register("email")}
               id="email"
               type="email"
               autoComplete="email"
               disabled={isSubmitting}
-              className="flex h-10 w-full rounded-md border border-input bg-background pr-3 pl-10 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-full rounded-md border border-input bg-surface pr-3 pl-9 py-2 text-sm placeholder:text-ink-faint focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="you@example.com"
             />
           </div>
@@ -104,29 +109,27 @@ export function LoginForm() {
 
         {/* Password Field */}
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium leading-none text-foreground"
-            >
-              Password
-            </label>
-          </div>
+          <label
+            htmlFor="password"
+            className="text-xs font-bold text-ink-secondary"
+          >
+            Password
+          </label>
           <div className="relative">
-            <Lock className="absolute top-1/2 left-3 h-4.5 w-4.5 -translate-y-1/2 text-muted-foreground" />
+            <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-faint" />
             <input
               {...register("password")}
               id="password"
               type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               disabled={isSubmitting}
-              className="flex h-10 w-full rounded-md border border-input bg-background pr-10 pl-10 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-full rounded-md border border-input bg-surface pr-9 pl-9 py-2 text-sm placeholder:text-ink-faint focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="••••••••"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
+              className="absolute top-1/2 right-3 -translate-y-1/2 text-ink-muted hover:text-ink focus:outline-none"
             >
               {showPassword ? (
                 <EyeOff className="h-4 w-4" />
@@ -146,7 +149,7 @@ export function LoginForm() {
         <Button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-emerald-600 text-white hover:bg-emerald-500 disabled:opacity-50 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+          className="w-full bg-primary text-white hover:bg-primary-active disabled:opacity-50 h-10 font-bold"
         >
           {isSubmitting ? (
             <>
@@ -159,11 +162,11 @@ export function LoginForm() {
         </Button>
       </form>
 
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-xs text-ink-muted">
         Don&apos;t have an account?{" "}
         <Link
           href="/register"
-          className="font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400 dark:hover:text-emerald-300"
+          className="font-bold text-primary hover:underline"
         >
           Sign up
         </Link>
