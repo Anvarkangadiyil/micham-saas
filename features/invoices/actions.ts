@@ -17,7 +17,7 @@ import Client from "@/models/Client";
 import Project from "@/models/Project";
 import Income from "@/models/Income";
 import { invoiceFormSchema, type InvoiceFormValues } from "./schemas";
-import { polishInvoiceLineItemDescription } from "@/services/openai";
+import { polishInvoiceLineItemDescription } from "@/services/gemini";
 import { serialize } from "@/lib/utils";
 
 async function getSessionUserOrThrow() {

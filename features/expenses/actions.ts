@@ -8,7 +8,7 @@ import Expense from "@/models/Expense";
 import Client from "@/models/Client";
 import Project from "@/models/Project";
 import { uploadReceipt } from "@/services/cloudinary";
-import { suggestExpenseCategory } from "@/services/openai";
+import { suggestExpenseCategory } from "@/services/gemini";
 import { expenseFormSchema, type ExpenseFormValues } from "./schemas";
 import { serialize } from "@/lib/utils";
 

@@ -1,6 +1,6 @@
 {
   "name": "expense-tracker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,9 +10,11 @@
     "seed": "node scripts/seed.js"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.8",
     "@better-auth/mongo-adapter": "^1.6.23",
     "@hookform/resolvers": "^5.4.0",
     "@types/bcryptjs": "^2.4.6",
+    "ai": "^7.0.15",
     "bcryptjs": "^3.0.3",
     "better-auth": "^1.6.23",
     "class-variance-authority": "^0.7.1",

@@ -39,4 +39,4 @@ Current phases: 0–5 all marked complete. Features not to build: multi-currency
 - `proxy.ts` at root exports the auth middleware guard — do not delete or edit unless changing route protection rules.
 - `README.md` is outdated (describes an old expenses-only prototype); do not rely on it.
 - Seed demo login: `demo@freelancer.com` / `password123`.
-- Environment required: `DATA_BASE_URL`, `AUTH_SECRET`, `NEXTAUTH_URL`, `OPENAI_API_KEY`, `CLOUDINARY_*` vars.
+- Environment required: `DATA_BASE_URL`, `AUTH_SECRET`, `NEXTAUTH_URL`, `GEMINI_API_KEY`, `CLOUDINARY_*` vars.
