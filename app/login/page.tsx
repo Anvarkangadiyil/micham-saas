@@ -2,8 +2,8 @@ import { LoginForm } from "@/features/auth/components/login-form";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Login - Freelancer Finance SaaS",
-  description: "Sign in to manage your freelance income, expenses, and invoices.",
+  title: "Login - Micham",
+  description: "Sign in to manage your income, expenses, and invoices with Micham.",
 };
 
 export default function LoginPage() {
@@ -17,7 +17,7 @@ export default function LoginPage() {
         {/* Logo/Header */}
         <div className="flex items-center gap-2 z-10">
           <div className="h-6 w-6 rounded bg-[#0075de]" />
-          <span className="font-bold tracking-tight text-sm uppercase">Freelancer Finance</span>
+          <span className="font-bold tracking-tight text-sm uppercase">Micham</span>
         </div>
 
         {/* Constellation Illustration Wrapper */}

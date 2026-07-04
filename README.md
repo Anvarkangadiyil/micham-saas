@@ -1,506 +1,137 @@
-# Expense Tracker
+# ⚖️ Micham (മീച്ചം)
 
-A modern full-stack **Expense Tracker** built using Next.js and MongoDB.
-The application allows users to record, filter, sort, and analyze personal expenses while ensuring reliability under real-world conditions such as network retries and page refreshes.
-
-The system is designed with **production-like quality**, focusing on correctness, maintainability, and reliability.
+> **Micham** (pronounced *Mee-cham*, meaning **balance** or **savings** in Malayalam) is a modern, zero-bloat bookkeeping and invoicing SaaS designed specifically for freelancers, independent contractors, and digital creators.
 
 ---
 
-# 📌 Project Overview
+## 📌 The Problem Micham Solves
 
-This application enables users to:
+Freelancing is liberating, but managing the business side is a massive headache. Tracking expenses across projects, maintaining client profiles, drafting professional billing invoices, and preparing reports for tax season usually requires juggling multiple disjointed spreadsheets or expensive, bloated corporate accounting software.
 
-* Add new expense entries
-* View all recorded expenses
-* Filter expenses by category
-* Sort expenses by date (newest first)
-* View the total of currently visible expenses
-* Handle duplicate submissions safely
-* Maintain persistent expense records
-
-The application simulates **real-world usage conditions**, including:
-
-* Multiple form submissions
-* Network retries
-* Page refresh after submission
-* Slow or failed API requests
-
-Special care was taken to ensure **data correctness**, particularly for financial values.
+**Micham** solves this by providing a unified, premium financial cockpit:
+- **No Bloat:** Built exclusively around the freelancer workflow (no double-entry ledger jargon).
+- **Automation first:** Uses **Google Gemini** (via **Vercel AI SDK**) to automatically categorize business expenses and polish rough project notes into professional client-facing invoice items.
+- **Financial Integrity:** Keeps income and billing invoices connected. Marking an invoice as paid automatically creates a corresponding income record, giving you an accurate, real-time snapshot of your actual net savings.
 
 ---
 
-# 🧰 Tech Stack
+## 🚀 Key Features
 
-## Frontend
+### 📊 Financial Dashboard & Analytics
+- Track monthly income, expenses, and net cashflow.
+- Visualize performance over time using interactive bar charts and expense distribution summaries.
+- Keep track of unpaid invoice balances and client lists at a glance.
 
-* **Next.js (App Router)** — Full-stack React framework
-* **TypeScript** — Type safety and maintainability
-* **Tailwind CSS** — Utility-first styling
-* **shadcn/ui** — Reusable accessible UI components
-* **date-fns** — Date formatting utilities
+### 📝 Smart Expense Logging
+- Log income inflows and expense outflows.
+- **AI Categorization:** Describe your expense (e.g. *"paid for github copilot annual subscription"*), and Micham automatically suggests the correct category (`software`, `travel`, `equipment`, `marketing`, `other`).
+- Support for Cloudinary-powered receipt attachments.
 
-## Backend
+### 💼 Client & Project CRM
+- Store company names, client emails, billing addresses, and internal notes.
+- Associate multiple client projects to monitor billing metrics per project.
 
-* **Next.js API Routes** — Backend API implementation
-* **Node.js** — Runtime environment
-* **Zod** — Request validation
+### 🧾 Professional Invoice Builder
+- Draft and preview clean, PDF-ready invoice statements.
+- **AI Copywriting:** Rewrite rough notes (e.g. *"wrote code for auth dashboard page"*) into a polished line-item description (e.g. *"Implementation of OAuth & Auth.js dashboard panels"*) with a single click.
+- Generate shared public links for clients to view, print, or download invoices directly.
 
-## Database
-
-* **MongoDB Atlas** — Cloud-hosted NoSQL database
-* **Mongoose** — Schema modeling and validation
-
-## Utilities
-
-* **UUID** — Unique request identifier generation
+### 🛡️ Authentication & Route Protection
+- Secure user sessions powered by **Auth.js v5 (NextAuth)**.
+- Automatic routing guards: unauthenticated visitors are kept on the SEO-optimized landing page, while logged-in users are routed straight to `/dashboard`.
 
 ---
 
-# ⚙️ Setup Instructions
+## 🧰 Technology Stack
 
-## 1️⃣ Clone Repository
+- **Frontend Core:** [Next.js 16](https://nextjs.org) (App Router, Server Components by default, Route Groups for layout persistence).
+- **Styling & UI:** [Tailwind CSS v4](https://tailwindcss.com) (theme-token Notion palette design system) + [shadcn/ui](https://ui.shadcn.com) (accessible primitives) + [Lucide React](https://lucide.dev) (modern icons).
+- **Database Layer:** [MongoDB Atlas](https://www.mongodb.com/atlas/database) + [Mongoose](https://mongoosejs.com) (schemas, global connection caching, and financial soft deletes).
+- **AI Integration:** [Vercel AI SDK Core](https://sdk.vercel.ai/docs) + [@ai-sdk/google](https://sdk.vercel.ai/providers/ai-sdk-providers/google) (`gemini-1.5-flash` model).
+- **Authentication:** [Auth.js v5](https://authjs.dev) (Credentials provider).
+- **Validation:** [Zod](https://zod.dev) (schema validations on Server Actions).
+- **File Uploads:** [Cloudinary API](https://cloudinary.com).
 
+---
+
+## ⚙️ Setup & Installation Instructions
+
+### Prerequisites
+Make sure you have [Node.js](https://nodejs.org) (v18+) and a running [MongoDB](https://www.mongodb.com) instance.
+
+### 1️⃣ Clone & Install
 ```bash
 git clone <repository-url>
 cd expense-tracker
-```
-
----
-
-## 2️⃣ Install Dependencies
-
-```bash
 npm install
 ```
 
----
-
-## 3️⃣ Configure Environment Variables
-
-Create a `.env.local` file in the root:
-
+### 2️⃣ Configure Environment Variables
+Create a `.env.local` file in the project root:
 ```env
-DATA_BASE_URL=mongodb+srv://username:password@cluster.mongodb.net/expense_tracker
-NODE_ENV=development
+# MongoDB Connection URL
+DATA_BASE_URL=mongodb://127.0.0.1:27017/expense-tracker
+
+# Auth.js Secret (Generate using: openssl rand -hex 32)
+AUTH_SECRET=your_auth_secret_here
+NEXTAUTH_URL=http://localhost:3000
+
+# Google Gemini API Key
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Cloudinary Credentials (for receipt image uploads)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-Ensure:
+### 3️⃣ Seed the Database
+To quickly test the application, seed the database with a pre-configured demo account and historical financial data:
+```bash
+npm run seed
+```
+- **Demo Username:** `demo@freelancer.com`
+- **Demo Password:** `password123`
 
-* MongoDB Atlas cluster is running
-* Your IP is allowed in MongoDB Atlas
-
----
-
-## 4️⃣ Run Development Server
-
+### 4️⃣ Start the Server
+Run the local Next.js development server:
 ```bash
 npm run dev
 ```
-
-Open:
-
-```text
-http://localhost:3000
-```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 5️⃣ Build for Production
+## 🗂️ Project Architecture & Design Decisions
 
-```bash
-npm run build
-npm start
-```
-
----
-
-# 📡 API Endpoints
-
-## GET `/api/expenses`
-
-Retrieve all expenses.
-
-Supports filtering and sorting.
-
-### Query Parameters
-
-| Parameter      | Description                 |
-| -------------- | --------------------------- |
-| category       | Filter expenses by category |
-| sort=date_desc | Sort newest first           |
-
-### Example
-
-```bash
-/api/expenses?category=Food&sort=date_desc
-```
-
-### Response
-
-```json
-[
-  {
-    "id": "uuid",
-    "amount": 250,
-    "category": "Food",
-    "description": "Lunch",
-    "date": "2026-04-24T00:00:00.000Z",
-    "created_at": "2026-04-24T10:30:00.000Z"
-  }
-]
-```
-
----
-
-## POST `/api/expenses`
-
-Create a new expense.
-
-### Request Body
-
-```json
-{
-  "amount": 250,
-  "category": "Food",
-  "description": "Lunch",
-  "date": "2026-04-24",
-  "requestId": "unique-uuid"
-}
-```
-
-### Behavior
-
-* Creates new expense
-* Prevents duplicate creation using `requestId`
-* Supports retry-safe operations
-
-### Response
-
-```json
-{
-  "id": "uuid",
-  "amount": 250,
-  "category": "Food",
-  "description": "Lunch",
-  "date": "...",
-  "created_at": "..."
-}
-```
-
----
-
-# 🗂️ Project Structure
-
+### Feature-Driven Folder Structure
+The codebase lives at the root and follows a modern feature-by-folder modular convention:
 ```text
 app/
- ├── api/
- │    └── expenses/
- │         └── route.ts
-
- ├── layout.tsx
- └── page.tsx
-
-components/
- ├── expense-form.tsx
- ├── expense-table.tsx
- ├── category-summary.tsx
-
-lib/
- ├── db.ts
- ├── validations/
-
-services/
- └── expense.service.ts
-
-models/
- └── Expense.ts
-
-public/
- └── screenshots/
+ ├── (dashboard)/        # Persistent layout containing sidebar, header, and auth guards
+ │    ├── dashboard/     # Main analytics view
+ │    ├── clients/       # CRM pages
+ │    ├── invoices/      # Invoice editor and sharing
+ │    ├── settings/      # Display & currency settings
+ │    └── transactions/  # Income/expense log sheets
+ ├── login/              # Guest auth login
+ ├── register/           # Guest auth register
+ └── page.tsx            # Public SEO landing page
+features/                # Scoped logic, components, actions, schemas per domain
+ ├── auth/
+ ├── clients/
+ ├── dashboard/
+ ├── expenses/
+ ├── income/
+ └── invoices/
+components/              # Shared UI components (app-layout, ui buttons, tables)
+services/                # Shared helper services (gemini.ts, cloudinary.ts)
+models/                  # Mongoose MongoDB models
+lib/                     # Utility functions (db connection caching, utility functions)
 ```
 
----
-
-# 🧠 Design Decisions
-
-## 1️⃣ Idempotent API Design
-
-**Decision:**
-Use `requestId` to ensure safe retries.
-
-**Why:**
-
-Users may:
-
-* Click submit multiple times
-* Refresh the page
-* Retry after network failure
-
-Without idempotency:
-
-```text
-Duplicate expenses could be created
-```
-
-**Solution:**
-
-* Client generates UUID
-* Server checks if request exists
-* If found → return existing record
-* Else → create new record
-
-This ensures **data correctness under unreliable networks**.
-
----
-
-## 2️⃣ MongoDB + Mongoose
-
-**Why MongoDB?**
-
-MongoDB was selected because:
-
-* Flexible schema design
-* Fast development iteration
-* Suitable for lightweight financial tools
-* Easy cloud deployment using MongoDB Atlas
-
-**Why Mongoose?**
-
-Mongoose provides:
-
-* Schema validation
-* Data consistency
-* Model-based structure
-* Cleaner database interactions
-
----
-
-## 3️⃣ MongoDB Connection Caching
-
-MongoDB connections are cached globally.
-
-**Why:**
-
-Creating new connections repeatedly:
-
-* Slows performance
-* Increases database load
-
-Global caching ensures:
-
-```text
-Faster requests
-Lower overhead
-Better scalability
-```
-
----
-
-## 4️⃣ Zod Validation
-
-All request payloads are validated using Zod.
-
-**Benefits:**
-
-* Prevent invalid data
-* Ensure positive expense values
-* Provide clear error messages
-* Maintain data integrity
-
----
-
-## 5️⃣ UI Component Strategy
-
-UI built using:
-
-```text
-shadcn/ui + Tailwind CSS
-```
-
-**Why:**
-
-* Accessible components
-* Minimal styling overhead
-* Clean professional layout
-* Consistent design patterns
-
----
-
-# 🧮 Expense Total Calculation
-
-The application dynamically calculates the total of **currently visible expenses**.
-
-Behavior:
-
-* Updates automatically after filtering
-* Updates after sorting
-* Reflects only visible records
-* Currency formatted using ₹ (INR)
-
-Example:
-
-```text
-Total: ₹1,250
-```
-
-This ensures accurate financial visibility.
-
----
-
-# ⚖️ Trade-offs
-
-## 1️⃣ No Update/Delete Operations
-
-Expenses can only be created.
-
-**Reason:**
-
-Focus was placed on:
-
-* Reliable creation
-* Filtering
-* Sorting
-
-These are core requirements.
-
-**Future improvement:**
-
-```text
-PATCH /api/expenses/:id
-DELETE /api/expenses/:id
-```
-
----
-
-## 2️⃣ Client-Side Aggregation
-
-Category totals are calculated on the client.
-
-**Advantages:**
-
-* Simpler backend
-* Faster UI updates
-* Reduced API complexity
-
-**Limitation:**
-
-Not suitable for very large datasets.
-
----
-
-## 3️⃣ Basic Category System
-
-Categories are stored as strings.
-
-**Trade-off:**
-
-No category management UI yet.
-
-Future:
-
-```text
-Category CRUD system
-```
-
----
-
-# 🚀 Future Improvements
-
-If more time were available, the following features would be added.
-
----
-
-## Core Improvements
-
-* Update existing expenses
-* Delete expenses
-* Date range filtering
-* Category management
-* Expense editing UI
-
----
-
-## Advanced Features
-
-* Budget tracking
-* Recurring expenses
-* CSV export
-* Monthly reports
-* Spending insights dashboard
-
----
-
-## Performance Improvements
-
-* Database indexing
-* Pagination
-* Caching layer
-* API rate limiting
-
----
-
-## Infrastructure Improvements
-
-* Docker containerization
-* CI/CD pipeline
-* Error monitoring
-* Performance logging
-
----
-
-# 🧪 Error Handling Strategy
-
-The system handles:
-
-* Network failures
-* Slow API responses
-* Invalid requests
-* Duplicate submissions
-
-Users receive:
-
-* Clear error messages
-* Safe retry behavior
-* Consistent system responses
-
----
-
-# 🌐 Deployment
-
-Recommended deployment:
-
-* **Frontend + API:** Vercel
-* **Database:** MongoDB Atlas
-
-Deployment command:
-
-```bash
-vercel deploy
-```
-
-After deployment:
-
-Update environment variables in Vercel.
-
----
-
-# 📌 Key Highlights
-
-✔ Retry-safe expense creation
-✔ Clean modular architecture
-✔ Production-ready API design
-✔ Reliable MongoDB integration
-✔ Responsive UI
-✔ Real-world reliability handling
-
----
-
-# 🧑‍💻 Author
-
-**Anvar Kangadiyil**
-
-Full Stack Developer
-Next.js | MongoDB | TypeScript
-
-
+### Key Architectural Choices
+1. **Server Components by Default:** Layouts and pages fetch database data directly on the server to maximize speed. Interactivity is pushed to leaf nodes (like forms and interactive charts) using `"use client"`.
+2. **Server Actions for Mutations:** All writes are handled via Secure Next.js Server Actions with strict Zod validation on entry before touching the Mongoose layer.
+3. **Connection Caching:** MongoDB database connections are cached globally (`lib/db.ts`) to avoid socket limits under high-concurrency serverless deployments.
+4. **Soft Deletes:** Financial records use an `isDeleted: Boolean` + `deletedAt: Date` soft delete policy to protect audit trails.

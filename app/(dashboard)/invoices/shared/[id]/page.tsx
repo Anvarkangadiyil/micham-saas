@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: SharedInvoicePageProps) {
   const { id } = await params;
   const result = await getSharedInvoiceById(id);
   return {
-    title: result.success && result.data ? `Invoice ${result.data.invoiceNumber} - Freelancer Finance` : "View Shared Invoice - Freelancer Finance",
+    title: result.success && result.data ? `Invoice ${result.data.invoiceNumber} - Micham` : "View Shared Invoice - Micham",
   };
 }
 
@@ -189,7 +189,7 @@ export default async function SharedInvoicePage({ params }: SharedInvoicePagePro
       {/* Public page print trigger prompt */}
       <div className="mt-6 flex items-center justify-center print:hidden">
         <p className="text-xs text-ink-muted">
-          Freelancer Finance Invoice Statement. Press <kbd className="bg-surface px-1.5 py-0.5 rounded border border-hairline font-mono font-bold">Ctrl+P</kbd> to export or print this document.
+          Micham Invoice Statement. Press <kbd className="bg-surface px-1.5 py-0.5 rounded border border-hairline font-mono font-bold">Ctrl+P</kbd> to export or print this document.
         </p>
       </div>
     </div>

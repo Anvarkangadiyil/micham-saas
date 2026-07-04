@@ -10,7 +10,7 @@ import { getInvoices } from "@/features/invoices/actions";
 import { getUserSettings } from "@/features/auth/actions";
 
 export const metadata = {
-  title: "Dashboard - Freelancer Finance",
+  title: "Dashboard - Micham",
   description: "Track and manage your business income and expenses",
 };
 

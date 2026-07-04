@@ -5,7 +5,7 @@ import { getClients } from "@/features/clients/actions";
 import { ClientList } from "@/features/clients/components/client-list";
 
 export const metadata = {
-  title: "Clients - Freelancer Finance",
+  title: "Clients - Micham",
   description: "Manage your client profiles",
 };
 

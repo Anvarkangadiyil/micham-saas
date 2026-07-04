@@ -7,7 +7,7 @@ import { getUserSettings } from "@/features/auth/actions";
 import { InvoiceList } from "@/features/invoices/components/invoice-list";
 
 export const metadata = {
-  title: "Invoices - Freelancer Finance",
+  title: "Invoices - Micham",
   description: "Create and manage invoices for client projects",
 };
 

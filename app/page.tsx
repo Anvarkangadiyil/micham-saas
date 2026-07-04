@@ -14,11 +14,11 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
-  title: "Freelancer Finance - Simple Expense & Invoice Tracker for Freelancers",
-  description: "Track your freelance business expenses, manage client billing, and send professional invoices in seconds. The ultimate bookkeeping and invoicing SaaS designed specifically for independent contractors, designers, and developers.",
+  title: "Micham - Simple Expense & Invoice Tracker for Freelancers",
+  description: "Track your business expenses, manage client billing, and send professional invoices in seconds. The ultimate bookkeeping and invoicing SaaS designed specifically for freelancers, independent contractors, designers, and developers.",
   keywords: [
-    "freelancer finance",
-    "freelance expense tracker",
+    "micham",
+    "micham expense tracker",
     "invoice generator",
     "freelance invoicing",
     "independent contractor bookkeeping",
@@ -29,10 +29,10 @@ export const metadata = {
     "freelancer invoice template"
   ],
   openGraph: {
-    title: "Freelancer Finance - Simple Expense & Invoice Tracker for Freelancers",
-    description: "Manage your freelance business finances, track expenses, and invoice clients effortlessly.",
+    title: "Micham - Simple Expense & Invoice Tracker for Freelancers",
+    description: "Manage your business finances, track expenses, and invoice clients effortlessly with Micham.",
     type: "website",
-    url: "https://freelancerfinance.com",
+    url: "https://micham.com",
   }
 };
 
@@ -70,42 +70,6 @@ export default function LandingPage() {
     },
   ];
 
-  const pricingTiers = [
-    {
-      name: "Starter",
-      price: "$0",
-      period: "forever",
-      description: "Essential tools for side-hustlers and new freelancers starting out.",
-      features: [
-        "Up to 3 active clients",
-        "Log unlimited expenses",
-        "Generate 5 invoices per month",
-        "Basic financial analytics dashboard",
-        "Local currency options",
-      ],
-      cta: "Get Started Free",
-      href: "/register",
-      popular: false,
-    },
-    {
-      name: "Pro Freelancer",
-      price: "$12",
-      period: "per month",
-      description: "The complete financial suite for active full-time independent professionals.",
-      features: [
-        "Unlimited client profiles",
-        "Unlimited expense logs",
-        "Unlimited custom invoices",
-        "Advanced charts & revenue analytics",
-        "Priority customer support",
-        "Export reports for accounting (CSV/PDF)",
-      ],
-      cta: "Go Pro (Free Trial)",
-      href: "/register",
-      popular: true,
-    },
-  ];
-
   const faqs = [
     {
       q: "Do I need a credit card to sign up?",
@@ -137,14 +101,12 @@ export default function LandingPage() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-white shadow-sm shadow-primary/10">
               <Wallet className="h-5 w-5" />
             </div>
-            <span className="tracking-tight text-lg font-bold">Freelancer Finance</span>
+            <span className="tracking-tight text-lg font-bold">Micham</span>
           </Link>
 
-          {/* Navigation Links (Desktop) */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-ink-muted">
             <a href="#features" className="hover:text-ink transition-colors">Features</a>
             <a href="#demo" className="hover:text-ink transition-colors">App Preview</a>
-            <a href="#pricing" className="hover:text-ink transition-colors">Pricing</a>
             <a href="#faq" className="hover:text-ink transition-colors">FAQ</a>
           </nav>
 
@@ -295,7 +257,7 @@ export default function LandingPage() {
               A Custom Financial Toolkit Built For You
             </h2>
             <p className="text-body-sm text-ink-muted">
-              Stop juggling complicated generic accounting software. Freelancer Finance focuses on what matters: tracking cashflow, billing clients, and keeping your taxes simple.
+              Stop juggling complicated generic accounting software. Micham focuses on what matters: tracking cashflow, billing clients, and keeping your taxes simple.
             </p>
           </div>
 
@@ -333,7 +295,7 @@ export default function LandingPage() {
           <div className="rounded-xl border border-hairline overflow-hidden shadow-elevation-2 bg-surface">
             {/* App Nav Shell */}
             <div className="bg-canvas-soft/40 border-b border-hairline px-4 py-2 flex items-center justify-between text-xs text-ink-faint">
-              <span className="font-semibold text-[11px]">app.freelancerfinance.com/dashboard</span>
+              <span className="font-semibold text-[11px]">app.micham.com/dashboard</span>
               <div className="h-2 w-2 rounded-full bg-primary/40" />
             </div>
             <div className="p-4 sm:p-8 bg-surface">
@@ -376,75 +338,6 @@ export default function LandingPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* PRICING SECTION                                                           */}
-      {/* ========================================================================= */}
-      <section id="pricing" className="py-20 bg-surface border-y border-hairline">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto space-y-4 mb-16">
-            <h2 className="text-heading-2 font-bold text-ink tracking-tight">
-              Flexible Plans Built For Growth
-            </h2>
-            <p className="text-body-sm text-ink-muted">
-              Choose the plan that fits the current scale of your freelance business. Upgrade or downgrade anytime.
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-            {pricingTiers.map((tier, i) => (
-              <div 
-                key={i} 
-                className={`rounded-xl border p-8 space-y-6 relative flex flex-col justify-between shadow-sm bg-surface ${
-                  tier.popular 
-                    ? "border-primary shadow-elevation-1 ring-1 ring-primary/20" 
-                    : "border-hairline"
-                }`}
-              >
-                {tier.popular && (
-                  <span className="absolute -top-3.5 right-6 inline-flex px-3 py-1 rounded-full bg-primary text-white text-[10px] font-bold uppercase tracking-wider">
-                    Most Popular
-                  </span>
-                )}
-                
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-ink">{tier.name}</h3>
-                    <p className="text-caption text-ink-muted mt-1 leading-snug">{tier.description}</p>
-                  </div>
-
-                  <div className="flex items-baseline gap-1 pt-2">
-                    <span className="text-heading-1 font-bold text-ink">{tier.price}</span>
-                    <span className="text-caption text-ink-muted">/{tier.period}</span>
-                  </div>
-
-                  <div className="border-t border-hairline pt-4">
-                    <ul className="space-y-3 text-caption text-ink-secondary">
-                      {tier.features.map((feature, fIndex) => (
-                        <li key={fIndex} className="flex items-start gap-2.5">
-                          <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <Link href={tier.href}>
-                    <Button 
-                      className="w-full font-semibold h-10 rounded-md"
-                      variant={tier.popular ? "default" : "outline"}
-                    >
-                      {tier.cta}
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
       {/* FAQ SECTION                                                               */}
       {/* ========================================================================= */}
       <section id="faq" className="py-20">
@@ -454,7 +347,7 @@ export default function LandingPage() {
               Frequently Asked Questions
             </h2>
             <p className="text-body-sm text-ink-muted">
-              Have questions about Freelancer Finance? Here are answers to common queries.
+              Have questions about Micham? Here are answers to common queries.
             </p>
           </div>
 
@@ -486,7 +379,7 @@ export default function LandingPage() {
             Ready to track your business correctly?
           </h2>
           <p className="text-body-sm text-ink-muted max-w-md mx-auto">
-            Join independent designers, writers, developers, and consultants who manage client billings with Freelancer Finance.
+            Join independent designers, writers, developers, and consultants who manage client billings with Micham.
           </p>
           <div className="pt-2">
             <Link href="/register">
@@ -508,16 +401,15 @@ export default function LandingPage() {
             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-white">
               <Wallet className="h-3.5 w-3.5" />
             </div>
-            <span className="tracking-tight font-bold">Freelancer Finance</span>
+            <span className="tracking-tight font-bold">Micham</span>
           </div>
           <div className="flex justify-center gap-6 text-ink-muted">
             <a href="#features" className="hover:text-ink">Features</a>
-            <a href="#pricing" className="hover:text-ink">Pricing</a>
             <a href="/login" className="hover:text-ink">Sign In</a>
             <a href="/register" className="hover:text-ink">Register</a>
           </div>
           <p className="pt-4 border-t border-hairline/40">
-            &copy; {new Date().getFullYear()} Freelancer Finance SaaS. All rights reserved. Designed for optimal SEO and conversion.
+            &copy; {new Date().getFullYear()} Micham SaaS. All rights reserved
           </p>
         </div>
       </footer>

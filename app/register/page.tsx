@@ -1,8 +1,8 @@
 import { RegisterForm } from "@/features/auth/components/register-form";
 
 export const metadata = {
-  title: "Register - Freelancer Finance SaaS",
-  description: "Create an account to start tracking your freelance finances.",
+  title: "Register - Micham",
+  description: "Create an account to start tracking your finances with Micham.",
 };
 
 export default function RegisterPage() {
@@ -16,7 +16,7 @@ export default function RegisterPage() {
         {/* Logo/Header */}
         <div className="flex items-center gap-2 z-10">
           <div className="h-6 w-6 rounded bg-[#0075de]" />
-          <span className="font-bold tracking-tight text-sm uppercase">Freelancer Finance</span>
+          <span className="font-bold tracking-tight text-sm uppercase">Micham</span>
         </div>
 
         {/* Constellation Illustration Wrapper */}

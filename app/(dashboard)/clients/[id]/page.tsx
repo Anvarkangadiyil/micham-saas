@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: ClientDetailPageProps) {
   const { id } = await params;
   const result = await getClientById(id);
   return {
-    title: result.success && result.data ? `${result.data.name} - Freelancer Finance` : "Client Details - Freelancer Finance",
+    title: result.success && result.data ? `${result.data.name} - Micham` : "Client Details - Micham",
   };
 }
 

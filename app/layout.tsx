@@ -3,8 +3,8 @@ import { Toaster } from "sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Freelancer Finance",
-  description: "Track and manage your freelance business finances, expenses, and invoices",
+  title: "Micham",
+  description: "Track and manage your business finances, expenses, invoices, and savings with Micham",
 };
 
 export default function RootLayout({

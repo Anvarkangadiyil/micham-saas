@@ -6,7 +6,7 @@ import { getProjects } from "@/features/projects/actions";
 import { InvoiceForm } from "@/features/invoices/components/invoice-form";
 
 export const metadata = {
-  title: "Create Invoice - Freelancer Finance",
+  title: "Create Invoice - Micham",
   description: "Draft a new client billing invoice",
 };
 

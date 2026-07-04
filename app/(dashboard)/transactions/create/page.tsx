@@ -7,7 +7,7 @@ import { getUserSettings } from "@/features/auth/actions";
 import { AddTransactionClient } from "@/features/dashboard/components/add-transaction-client";
 
 export const metadata = {
-  title: "New Transaction - Freelancer Finance",
+  title: "New Transaction - Micham",
   description: "Log a new business income inflow or expense outflow",
 };
 

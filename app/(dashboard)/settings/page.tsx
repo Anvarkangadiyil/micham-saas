@@ -5,7 +5,7 @@ import { getUserSettings } from "@/features/auth/actions";
 import { SettingsForm } from "@/features/auth/components/settings-form";
 
 export const metadata = {
-  title: "Settings - Freelancer Finance",
+  title: "Settings - Micham",
   description: "Configure your freelancer profile and display options",
 };
 

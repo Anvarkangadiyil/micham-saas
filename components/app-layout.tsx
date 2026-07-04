@@ -110,7 +110,7 @@ export function AppLayout({ children, user, maxWidth = "max-w-5xl" }: AppLayoutP
                 isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
               )}
             >
-              Freelancer Finance
+              Micham
             </span>
           </Link>
           
@@ -205,7 +205,7 @@ export function AppLayout({ children, user, maxWidth = "max-w-5xl" }: AppLayoutP
             </div>
             <div className="md:hidden flex items-center gap-1.5 font-semibold text-ink text-sm">
               <Wallet className="h-4.5 w-4.5 text-primary" />
-              <span>FF</span>
+              <span>M</span>
             </div>
           </div>
 

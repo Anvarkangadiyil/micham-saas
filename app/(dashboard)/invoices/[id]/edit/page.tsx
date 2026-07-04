@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: EditInvoicePageProps) {
   const { id } = await params;
   const result = await getInvoiceById(id);
   return {
-    title: result.success && result.data ? `Edit ${result.data.invoiceNumber} - Freelancer Finance` : "Edit Invoice - Freelancer Finance",
+    title: result.success && result.data ? `Edit ${result.data.invoiceNumber} - Micham` : "Edit Invoice - Micham",
   };
 }
 
