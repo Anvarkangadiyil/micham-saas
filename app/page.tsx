@@ -111,7 +111,12 @@ export default function LandingPage() {
           </nav>
 
           {/* Auth CTA Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Link href="/login?demo=true">
+              <Button variant="outline" size="sm" className="font-semibold text-primary border-primary/20 hover:border-primary hover:bg-primary/5 rounded-md hidden sm:inline-flex">
+                Try Demo
+              </Button>
+            </Link>
             <Link href="/login">
               <Button variant="ghost" size="sm" className="font-semibold text-ink-muted hover:text-ink hover:bg-canvas-soft rounded-md">
                 Sign In
@@ -157,7 +162,7 @@ export default function LandingPage() {
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
-                <Link href="/login" className="w-full sm:w-auto">
+                <Link href="/login?demo=true" className="w-full sm:w-auto">
                   <Button variant="outline" className="w-full sm:w-auto h-11 px-6 font-semibold border-border hover:bg-surface text-ink-secondary rounded-lg">
                     Demo Account Access
                   </Button>

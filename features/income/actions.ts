@@ -8,6 +8,7 @@ import Client from "@/models/Client";
 import Project from "@/models/Project";
 import { incomeFormSchema, type IncomeFormValues } from "./schemas";
 import { serialize } from "@/lib/utils";
+import { checkDemoRestriction } from "@/lib/demo";
 
 async function getSessionUserOrThrow() {
   const session = await auth();
@@ -87,6 +88,7 @@ export async function createIncome(values: IncomeFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("create income");
     await connectDB();
 
     const { amount, date, clientId, projectId, source, notes } = validated.data;
@@ -136,6 +138,7 @@ export async function updateIncome(id: string, values: IncomeFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("update income");
     await connectDB();
 
     const { amount, date, clientId, projectId, source, notes } = validated.data;
@@ -186,6 +189,7 @@ export async function updateIncome(id: string, values: IncomeFormValues) {
 export async function deleteIncome(id: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("delete income");
     await connectDB();
 
     const deletedIncome = await Income.findOneAndUpdate(

@@ -7,6 +7,7 @@ import { registerSchema, RegisterInput, loginSchema, LoginInput } from "./schema
 import { signIn, auth, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { checkDemoRestriction } from "@/lib/demo";
 
 /**
  * Registers a new user in the database.
@@ -128,6 +129,7 @@ export async function getUserSettings() {
 export async function updateUserSettings(name: string, currencySymbol: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("update settings");
     if (!name || name.trim() === "") {
       return { success: false, error: "Name is required." };
     }
@@ -168,6 +170,7 @@ export async function updateUserSettings(name: string, currencySymbol: string) {
 export async function deleteUserAccount() {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("delete account");
     await connectDB();
 
     const user = await User.findByIdAndUpdate(

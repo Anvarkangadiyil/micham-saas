@@ -19,6 +19,7 @@ import Income from "@/models/Income";
 import { invoiceFormSchema, type InvoiceFormValues } from "./schemas";
 import { polishInvoiceLineItemDescription } from "@/services/gemini";
 import { serialize } from "@/lib/utils";
+import { checkDemoRestriction } from "@/lib/demo";
 
 async function getSessionUserOrThrow() {
   const session = await auth();
@@ -234,6 +235,7 @@ export async function createInvoice(values: InvoiceFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("create invoice");
     await connectDB();
 
     // Verify client belongs to user
@@ -293,6 +295,7 @@ export async function updateInvoice(id: string, values: InvoiceFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("update invoice");
     await connectDB();
 
     // Verify client belongs to user
@@ -353,6 +356,7 @@ export async function updateInvoice(id: string, values: InvoiceFormValues) {
 export async function deleteInvoice(id: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("delete invoice");
     await connectDB();
 
     const deleted = await Invoice.findOneAndUpdate(
@@ -382,6 +386,7 @@ export async function deleteInvoice(id: string) {
 export async function markInvoiceAsPaid(id: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("mark invoice as paid");
     await connectDB();
 
     const invoice = await Invoice.findOne({ _id: id, userId, isDeleted: { $ne: true } });
@@ -439,6 +444,7 @@ export async function markInvoiceAsPaid(id: string) {
 export async function polishInvoiceDescriptionAction(roughNotes: string) {
   try {
     await getSessionUserOrThrow();
+    await checkDemoRestriction("polish description");
     const polished = await polishInvoiceLineItemDescription(roughNotes);
     return { success: true, polished };
   } catch (error: unknown) {

@@ -7,6 +7,7 @@ import Project from "@/models/Project";
 import Client from "@/models/Client";
 import { projectFormSchema, type ProjectFormValues } from "./schemas";
 import { serialize } from "@/lib/utils";
+import { checkDemoRestriction } from "@/lib/demo";
 
 /**
  * Checks if the user is authenticated and returns their userId.
@@ -108,6 +109,7 @@ export async function createProject(values: ProjectFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("create project");
     await connectDB();
 
     // Verify client belongs to this user and isn't deleted
@@ -163,6 +165,7 @@ export async function updateProject(id: string, values: ProjectFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("update project");
     await connectDB();
 
     const updatedProject = await Project.findOneAndUpdate(
@@ -204,6 +207,7 @@ export async function updateProject(id: string, values: ProjectFormValues) {
 export async function deleteProject(id: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("delete project");
     await connectDB();
 
     const deletedProject = await Project.findOneAndUpdate(

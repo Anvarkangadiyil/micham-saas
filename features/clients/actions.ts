@@ -7,6 +7,7 @@ import Client from "@/models/Client";
 import Project from "@/models/Project";
 import { clientFormSchema, type ClientFormValues } from "./schemas";
 import { serialize } from "@/lib/utils";
+import { checkDemoRestriction } from "@/lib/demo";
 
 /**
  * Checks if the user is authenticated and returns their userId.
@@ -107,6 +108,7 @@ export async function createClient(values: ClientFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("create client");
     await connectDB();
 
     const newClient = new Client({
@@ -149,6 +151,7 @@ export async function updateClient(id: string, values: ClientFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("update client");
     await connectDB();
 
     const updatedClient = await Client.findOneAndUpdate(
@@ -190,6 +193,7 @@ export async function updateClient(id: string, values: ClientFormValues) {
 export async function deleteClient(id: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("delete client");
     await connectDB();
 
     // Soft delete the client

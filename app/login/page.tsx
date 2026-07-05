@@ -1,5 +1,7 @@
 import { LoginForm } from "@/features/auth/components/login-form";
 import Image from "next/image";
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 
 export const metadata = {
   title: "Login - Micham",
@@ -54,7 +56,14 @@ export default function LoginPage() {
           v1.0.0
         </div>
         <div className="w-full flex justify-center animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <LoginForm />
+          <Suspense fallback={
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <p className="text-2xs text-ink-muted">Loading credentials...</p>
+            </div>
+          }>
+            <LoginForm />
+          </Suspense>
         </div>
       </div>
     </div>

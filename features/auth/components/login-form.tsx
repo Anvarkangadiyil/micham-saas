@@ -1,24 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginInput } from "../schemas";
 import { loginUser } from "../actions";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -27,6 +29,15 @@ export function LoginForm() {
       password: "",
     },
   });
+
+  const isDemo = searchParams.get("demo") === "true";
+
+  useEffect(() => {
+    if (isDemo) {
+      setValue("email", "demo@freelancer.com");
+      setValue("password", "password123");
+    }
+  }, [isDemo, setValue]);
 
   const onSubmit = async (data: LoginInput) => {
     setGlobalError(null);

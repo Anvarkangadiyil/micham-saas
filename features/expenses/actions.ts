@@ -11,6 +11,7 @@ import { uploadReceipt } from "@/services/cloudinary";
 import { suggestExpenseCategory } from "@/services/gemini";
 import { expenseFormSchema, type ExpenseFormValues } from "./schemas";
 import { serialize } from "@/lib/utils";
+import { checkDemoRestriction } from "@/lib/demo";
 
 async function getSessionUserOrThrow() {
   const session = await auth();
@@ -90,6 +91,7 @@ export async function createExpense(values: ExpenseFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("create expense");
     await connectDB();
 
     const { amount, category, description, date, clientId, projectId, receiptUrl, notes } = validated.data;
@@ -142,6 +144,7 @@ export async function updateExpense(id: string, values: ExpenseFormValues) {
     }
 
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("update expense");
     await connectDB();
 
     const { amount, category, description, date, clientId, projectId, receiptUrl, notes } = validated.data;
@@ -194,6 +197,7 @@ export async function updateExpense(id: string, values: ExpenseFormValues) {
 export async function deleteExpense(id: string) {
   try {
     const userId = await getSessionUserOrThrow();
+    await checkDemoRestriction("delete expense");
     await connectDB();
 
     const deletedExpense = await Expense.findOneAndUpdate(
@@ -228,6 +232,7 @@ export async function deleteExpense(id: string) {
 export async function uploadReceiptAction(formData: FormData) {
   try {
     await getSessionUserOrThrow();
+    await checkDemoRestriction("upload receipt");
     const file = formData.get("file") as File;
     if (!file) {
       return { success: false, error: "No file uploaded." };
@@ -249,6 +254,7 @@ export async function uploadReceiptAction(formData: FormData) {
 export async function suggestCategoryAction(description: string) {
   try {
     await getSessionUserOrThrow();
+    await checkDemoRestriction("suggest category");
     const category = await suggestExpenseCategory(description);
     return { success: true, category };
   } catch (error: unknown) {
