@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getSharedInvoiceById } from "@/features/invoices/actions";
 import { Building2, Mail, Folder } from "lucide-react";
-import { PrintTrigger } from "./print-trigger";
+import { PrintTrigger, SharedInvoiceActions } from "./print-trigger";
 
 interface SharedInvoicePageProps {
   params: Promise<{ id: string }>;
@@ -36,6 +36,9 @@ export default async function SharedInvoicePage({ params }: SharedInvoicePagePro
     <div className="min-h-screen bg-canvas-soft print:bg-white flex flex-col justify-center items-center py-10 px-4 sm:px-6 print:py-0 print:px-0">
       {/* Print Trigger Client Helper */}
       <PrintTrigger />
+
+      {/* Interactive Toolbar for web view */}
+      <SharedInvoiceActions />
 
       {/* Invoice Document Layout Container */}
       <div className="w-full max-w-3xl rounded-lg border border-hairline bg-surface p-8 sm:p-12 shadow-elevation-2 print:shadow-none print:border-none print:p-0 print:max-w-none flex flex-col justify-between min-h-[700px] print:min-h-0 bg-white">
@@ -189,7 +192,7 @@ export default async function SharedInvoicePage({ params }: SharedInvoicePagePro
       {/* Public page print trigger prompt */}
       <div className="mt-6 flex items-center justify-center print:hidden">
         <p className="text-xs text-ink-muted">
-          Micham Invoice Statement. Press <kbd className="bg-surface px-1.5 py-0.5 rounded border border-hairline font-mono font-bold">Ctrl+P</kbd> to export or print this document.
+          Micham Invoice Statement. Click <strong className="font-semibold text-ink-secondary">Print / PDF</strong> above to print or save this invoice as a PDF file.
         </p>
       </div>
     </div>
