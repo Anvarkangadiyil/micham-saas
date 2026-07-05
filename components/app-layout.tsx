@@ -13,6 +13,7 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Wallet, 
+  CircleDollarSign,
   LogOut 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -43,6 +44,7 @@ export function AppLayout({ children, user, maxWidth = "max-w-5xl" }: AppLayoutP
 
   const links = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/transactions", label: "Transactions", icon: CircleDollarSign },
     { href: "/clients", label: "Clients", icon: Users },
     { href: "/invoices", label: "Invoices", icon: FileText },
     { href: "/settings", label: "Settings", icon: Settings },
@@ -54,8 +56,7 @@ export function AppLayout({ children, user, maxWidth = "max-w-5xl" }: AppLayoutP
       return (
         pathname === "/" ||
         pathname === "/dashboard" ||
-        pathname.startsWith("/dashboard/") ||
-        pathname.startsWith("/transactions")
+        pathname.startsWith("/dashboard/")
       );
     }
     return pathname === href || pathname.startsWith(href + "/");
