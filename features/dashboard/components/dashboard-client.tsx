@@ -15,6 +15,8 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Eye,
+  Download,
+  FileJson,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -90,7 +92,9 @@ export function DashboardClient({
 
   // Filter states
   const [filterType, setFilterType] = useState<"all" | "income" | "expense">("all");
-  const [filterDate, setFilterDate] = useState<"month" | "30days" | "year" | "all">("month");
+  const [filterDate, setFilterDate] = useState<
+    "month" | "30days" | "year" | "last-year" | "fiscal" | "last-fiscal" | "all"
+  >("month");
   const [filterClientId, setFilterClientId] = useState<string>("");
 
   // Edit modals state
@@ -206,6 +210,7 @@ export function DashboardClient({
       // Date Filter
       const txDate = new Date(tx.date);
       const now = new Date();
+      const currentYear = now.getFullYear();
       if (filterDate === "month") {
         if (txDate.getFullYear() !== now.getFullYear() || txDate.getMonth() !== now.getMonth()) return false;
       } else if (filterDate === "30days") {
@@ -214,6 +219,19 @@ export function DashboardClient({
         if (txDate < thirtyDaysAgo) return false;
       } else if (filterDate === "year") {
         if (txDate.getFullYear() !== now.getFullYear()) return false;
+      } else if (filterDate === "last-year") {
+        if (txDate.getFullYear() !== now.getFullYear() - 1) return false;
+      } else if (filterDate === "fiscal") {
+        // Fiscal Year (Apr 1 - Mar 31)
+        const fyStartYear = now.getMonth() < 3 ? currentYear - 1 : currentYear;
+        const fyStartDate = new Date(fyStartYear, 3, 1);
+        const fyEndDate = new Date(fyStartYear + 1, 2, 31, 23, 59, 59);
+        if (txDate < fyStartDate || txDate > fyEndDate) return false;
+      } else if (filterDate === "last-fiscal") {
+        const fyStartYear = (now.getMonth() < 3 ? currentYear - 1 : currentYear) - 1;
+        const fyStartDate = new Date(fyStartYear, 3, 1);
+        const fyEndDate = new Date(fyStartYear + 1, 2, 31, 23, 59, 59);
+        if (txDate < fyStartDate || txDate > fyEndDate) return false;
       }
 
       return true;
@@ -254,6 +272,91 @@ export function DashboardClient({
       const fullIncome = initialIncomes.find((i) => i._id === tx._id);
       setEditingIncome(fullIncome);
     }
+  };
+
+  // CSV Export
+  const exportToCSV = () => {
+    if (filteredTransactions.length === 0) {
+      toast.error("No transactions to export.");
+      return;
+    }
+
+    const escapeCSV = (val: any) => {
+      if (val === null || val === undefined) return "";
+      const str = String(val);
+      if (str.includes(",") || str.includes('"') || str.includes("\n") || str.includes("\r")) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const headers = ["Type", "Date", "Amount", "Vendor / Source", "Category", "Client", "Project", "Notes"];
+    const rows = filteredTransactions.map((tx) => [
+      tx.type === "income" ? "Income" : "Expense",
+      tx.date.substring(0, 10), // format YYYY-MM-DD
+      tx.amount.toFixed(2),
+      tx.sourceOrVendor,
+      tx.categoryOrSource,
+      tx.clientId ? tx.clientId.name : "",
+      tx.projectId ? tx.projectId.name : "",
+      tx.notes || "",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map(escapeCSV).join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+
+    const dateStr = new Date().toISOString().split("T")[0];
+    const periodStr = filterDate === "all" ? "all_time" : filterDate;
+    link.setAttribute("download", `freelancer_transactions_${periodStr}_${dateStr}.csv`);
+
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("CSV export downloaded successfully.");
+  };
+
+  // JSON Export
+  const exportToJSON = () => {
+    if (filteredTransactions.length === 0) {
+      toast.error("No transactions to export.");
+      return;
+    }
+
+    const formattedData = filteredTransactions.map((tx) => ({
+      id: tx._id,
+      type: tx.type,
+      date: tx.date.substring(0, 10),
+      amount: tx.amount,
+      vendorOrSource: tx.sourceOrVendor,
+      category: tx.categoryOrSource,
+      client: tx.clientId ? { id: tx.clientId._id, name: tx.clientId.name } : null,
+      project: tx.projectId ? { id: tx.projectId._id, name: tx.projectId.name } : null,
+      notes: tx.notes || null,
+    }));
+
+    const jsonContent = JSON.stringify(formattedData, null, 2);
+    const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+
+    const dateStr = new Date().toISOString().split("T")[0];
+    const periodStr = filterDate === "all" ? "all_time" : filterDate;
+    link.setAttribute("download", `freelancer_transactions_${periodStr}_${dateStr}.json`);
+
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("JSON export downloaded successfully.");
   };
 
   const hasClients = clients.length > 0;
@@ -431,7 +534,31 @@ export function DashboardClient({
       <div className="space-y-4">
         {/* Table Filters */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-hairline pb-4">
-          <h2 className="text-base font-semibold text-ink">Transactions</h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="text-base font-semibold text-ink">Transactions</h2>
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToCSV}
+                className="h-7 px-2.5 text-xs font-semibold gap-1.5 border-hairline hover:bg-canvas-soft text-ink-secondary rounded-md"
+                title="Export filtered transactions to CSV"
+              >
+                <Download className="h-3.5 w-3.5 text-ink-faint" />
+                <span>Export CSV</span>
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportToJSON}
+                className="h-7 px-2.5 text-xs font-semibold gap-1.5 border-hairline hover:bg-canvas-soft text-ink-secondary rounded-md"
+                title="Export filtered transactions to JSON"
+              >
+                <FileJson className="h-3.5 w-3.5 text-ink-faint" />
+                <span>Export JSON</span>
+              </Button>
+            </div>
+          </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Filter Type */}
@@ -479,7 +606,10 @@ export function DashboardClient({
             >
               <option value="month">This Month</option>
               <option value="30days">Last 30 Days</option>
-              <option value="year">This Year</option>
+              <option value="year">This Calendar Year (Jan - Dec)</option>
+              <option value="last-year">Last Calendar Year</option>
+              <option value="fiscal">This Fiscal Year (Apr - Mar)</option>
+              <option value="last-fiscal">Last Fiscal Year (Apr - Mar)</option>
               <option value="all">All Time</option>
             </select>
 
