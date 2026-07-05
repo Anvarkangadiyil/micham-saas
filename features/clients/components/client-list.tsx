@@ -208,7 +208,7 @@ export function ClientList({ clients }: ClientListProps) {
       {/* Edit Client Modal */}
       {editingClient && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 bg-white">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-ink">Edit Client</h2>
               <p className="text-xs text-ink-muted mt-0.5">
@@ -230,7 +230,7 @@ export function ClientList({ clients }: ClientListProps) {
       {/* Delete Client Confirmation Modal */}
       {deletingClientId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 bg-white">
             <h3 className="text-lg font-semibold text-ink">Delete Client</h3>
             <p className="text-sm text-ink-muted mt-2">
               Are you sure you want to delete this client? This action will also **soft-delete all projects** associated with this client.

@@ -157,7 +157,7 @@ export function ProjectList({ clientId, projects }: ProjectListProps) {
       {/* Add Project Modal */}
       {isAddOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 bg-white">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-ink">Add New Project</h2>
               <p className="text-xs text-ink-muted mt-0.5">
@@ -179,7 +179,7 @@ export function ProjectList({ clientId, projects }: ProjectListProps) {
       {/* Edit Project Modal */}
       {editingProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 bg-white">
             <div className="mb-4">
               <h2 className="text-lg font-semibold text-ink">Edit Project</h2>
               <p className="text-xs text-ink-muted mt-0.5">
@@ -202,7 +202,7 @@ export function ProjectList({ clientId, projects }: ProjectListProps) {
       {/* Delete Project Confirmation Modal */}
       {deletingProjectId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="w-full max-w-md rounded-lg border border-hairline bg-surface p-6 shadow-elevation-2 animate-in fade-in zoom-in-95 duration-150 bg-white">
             <h3 className="text-lg font-semibold text-ink">Delete Project</h3>
             <p className="text-sm text-ink-muted mt-2">
               Are you sure you want to delete this project? This will soft-delete the record.
